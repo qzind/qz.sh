@@ -84,7 +84,7 @@ if [ "$TAG" == "auto" ]; then
         case $line in
             *"\"tag_name\":"*)
                 # assume "tag_name": comes before "prerelease":
-                tag_name="$(echo "$line" |cut -d ":" -f2 |tr -d '"'|tr -d ',' |tr -d ' ')"
+                tag_name="$(echo "$line" |cut -d '"' -f4 |tr -d '"'|tr -d ',' |tr -d ' ')"
                 ;;
             *"\"prerelease\": false,"*)
                 STABLE_TAGS+="$tag_name"$'\n'
@@ -116,13 +116,14 @@ if [ "$TAG" == "auto" ]; then
 fi
 
 # Get URL for latest release
-echo -e "Searching ${BLUE} ${EXTENSION}${PLAIN} downloads for ${BLUE}${TAG}${PLAIN} matching ${BLUE}${ARCH}${PLAIN}..."
+echo -e "Searching ${BLUE}${EXTENSION}${PLAIN} downloads for ${BLUE}${TAG}${PLAIN} matching ${BLUE}${ARCH}${PLAIN}..."
 OS_URLS=""
 while IFS= read -r line; do
     url=""
     case $line in
         *"download/$TAG/"*)
-            url=$(echo "$line" |cut -w -f3 |tr -d '"'|tr -d ',' |tr -d ' ')
+            url=$(echo "$line" |cut -d '"' -f4 |tr -d '"'|tr -d ',' |tr -d ' ')
+            echo "$url"
             ;;
     esac
     case $url in
