@@ -29,7 +29,7 @@ if [ ! -z "$1" ]; then
     echo -e "Picked up argument: ${BLUE}$1${PLAIN}"
     case $1 in
     *"help")
-        SCRIPT="$FETCH qz.sh |sh -s --"
+        SCRIPT="$FETCH qz.sh |bash -s --"
         if [ -t 0 ]; then
             SCRIPT="install.sh"
         fi
