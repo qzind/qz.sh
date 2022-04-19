@@ -10,7 +10,7 @@ RED="\\x1B[1;31m";GREEN="\\x1B[1;32m";BLUE="\\x1B[1;34m";YELLOW="\\x1B[1;33m";PL
 
 OWNER="qzind"
 REPO="tray"
-URL="https://api.github.com/repos/${OWNER}/${REPO}/releases"
+URL="https://api.github.com/repos/${OWNER}/${REPO}/releases?per_page=100"
 
 RELEASE="auto"  # e.g. "stable", "unstable"
 TAG="auto"      # e.g. "2.2.1", "v2.1.6"
@@ -71,8 +71,15 @@ fi
 
 echo -e "Parsing ${BLUE}${URL}${PLAIN}..."
 
-# TODO: Add wget support
-JSON="$(curl -s "https://api.github.com/repos/${OWNER}/${REPO}/releases?per_page=100")"
+# Determine if curl or wget are available
+if which curl >/dev/null 2>&1 ; then
+    JSON="$(curl -Ls "$URL")"
+elif which wget >/dev/null 2>&1 ; then
+    JSON="$(wget -q -O - "$URL")"
+else
+    echo -e "${RED}Either \"curl\" or \"wget\" are required to use this script"
+    exit 2
+fi
 
 # Gather stable and beta tagged releases by loop over JSON returned from GitHub API
 if [ "$TAG" == "auto" ]; then
@@ -112,6 +119,11 @@ if [ "$TAG" == "auto" ]; then
             ;;
     esac
 
+    if [ -z "$TAG" ]; then
+        echo -e "${RED}Unable to locate a tag for this release"
+        exit 2
+    fi
+
     echo -e "Latest ${GREEN}${RELEASE}${PLAIN} version found: ${BLUE}$TAG${PLAIN}"
 fi
 
@@ -123,7 +135,6 @@ while IFS= read -r line; do
     case $line in
         *"download/$TAG/"*)
             url=$(echo "$line" |cut -d '"' -f4 |tr -d '"'|tr -d ',' |tr -d ' ')
-            echo "$url"
             ;;
     esac
     case $url in
@@ -172,4 +183,47 @@ if [ -z "$DOWNLOAD_URL" ]; then
     exit 2
 fi
 
-echo -e "Downloading ${BLUE}$DOWNLOAD_URL${PLAIN}..."
+echo -e "Downloading ${BLUE}${DOWNLOAD_URL}${PLAIN}..."
+
+# Determine if curl or wget are available
+TEMP_FILE="/tmp/${REPO}-${TAG}${EXTENSION}"
+
+# Remove old copy if needed
+if [ -f "$TEMP_FILE" ]; then
+    rm -f "$TEMP_FILE" >/dev/null
+fi
+
+# Download installer using curl or wget
+if which curl >/dev/null 2>&1 ; then
+    # Note: GitHub uses redirects, make sure "curl -L" is specifed
+    curl -Ls "$DOWNLOAD_URL" --output "/tmp/${REPO}-${TAG}${EXTENSION}"
+elif which wget >/dev/null 2>&1 ; then
+    # Note: GitHub uses redirects, but wget should follow redirects automatically
+    wget -q -O $TEMP_FILE "$DOWNLOAD_URL"
+else
+    echo -e "${RED}Either \"curl\" or \"wget\" are required to use this script"
+    exit 2
+fi
+
+# Install using unattended techniques: https://github.com/qzind/tray/wiki/deployment
+echo -e "Download successful, beginning the install..."
+case $OSTYPE in
+    "darwin"*)
+        # Assume .pkg (installer) for MacOS
+        sudo installer -pkg "$TEMP_FILE" -target /
+        ;;
+    *)
+        # Assume .run (makeself) for others
+        if which sudo >/dev/null 2>&1 ; then
+            # use "sudo" if available
+            sudo bash "$TEMP_FILE" -- -y
+        else
+            # fallback to "su -c"
+            su root -c "bash \"$TEMP_FILE\""
+        fi
+        ;;
+esac
+
+# Clean up
+rm -f "$TEMP_FILE" >/dev/null
+exit 0
