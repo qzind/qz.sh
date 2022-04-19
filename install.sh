@@ -34,10 +34,10 @@ if [ ! -z "$1" ]; then
             SCRIPT="install.sh"
         fi
         echo -e "\nUsage:\n  $SCRIPT [\"${GREEN}stable${PLAIN}\"|\"${YELLOW}beta${PLAIN}\"|<${BLUE}version${PLAIN}>|\"${PURPLE}help${PLAIN}\"]"
-        echo -e "    ${GREEN}stable${PLAIN}:  Downloads and installs the latest stable release"
-        echo -e "    ${YELLOW}beta${PLAIN}:    Downloads and installs the latest beta release"
-        echo -e "    ${BLUE}version${PLAIN}: Downloads and installs the exact version specified (e.g. \"2.2.1\")"
-        echo -e "    ${PURPLE}help${PLAIN}:    Displays this help and exits"
+        echo -e "    ${GREEN}stable${PLAIN}   Downloads and installs the latest stable release"
+        echo -e "    ${YELLOW}beta${PLAIN}     Downloads and installs the latest beta release"
+        echo -e "    ${BLUE}version${PLAIN}  Downloads and installs the exact version specified, e.g. \"2.2.1\""
+        echo -e "    ${PURPLE}help${PLAIN}     Displays this help and exits"
         echo -e "\n  The default behavior is to download and install the ${GREEN}stable${PLAIN} version\n"
         exit 0
         ;;
