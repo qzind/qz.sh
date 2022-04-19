@@ -6,17 +6,41 @@ set -e
 # Contribute to this script by visting the above website and opening an issue or pull request
 
 # Console colors
-RED="\\x1B[1;31m";GREEN="\\x1B[1;32m";BLUE="\\x1B[1;34m";YELLOW="\\x1B[1;33m";PLAIN="\\x1B[0m"
+RED="\\x1B[1;31m";GREEN="\\x1B[1;32m";BLUE="\\x1B[1;34m";PURPLE="\\x1B[1;35m";YELLOW="\\x1B[1;33m";PLAIN="\\x1B[0m"
 
 OWNER="qzind"
 REPO="tray"
 URL="https://api.github.com/repos/${OWNER}/${REPO}/releases?per_page=100"
+
+FETCH=""
+# Determine if curl or wget are available
+if which curl >/dev/null 2>&1 ; then
+    FETCH="curl -Ls"
+elif which wget >/dev/null 2>&1 ; then
+    FETCH="wget -q -O -"
+else
+    echo -e "${RED}Either \"curl\" or \"wget\" are required to use this script"
+    exit 2
+fi
 
 RELEASE="auto"  # e.g. "stable", "unstable"
 TAG="auto"      # e.g. "2.2.1", "v2.1.6"
 if [ ! -z "$1" ]; then
     echo -e "Picked up argument: ${BLUE}$1${PLAIN}"
     case $1 in
+    *"help")
+        SCRIPT="$FETCH qz.sh |sh -s --"
+        if [ -t 0 ]; then
+            SCRIPT="install.sh"
+        fi
+        echo -e "\nUsage:\n  $SCRIPT [\"${GREEN}stable${PLAIN}\"|\"${YELLOW}beta${PLAIN}\"|<${BLUE}version${PLAIN}>|\"${PURPLE}help${PLAIN}\"]"
+        echo -e "    ${GREEN}stable${PLAIN}:  Downloads and installs the latest stable release"
+        echo -e "    ${YELLOW}beta${PLAIN}:    Downloads and installs the latest beta release"
+        echo -e "    ${BLUE}version${PLAIN}: Downloads and installs the exact version specified (e.g. \"2.2.1\")"
+        echo -e "    ${PURPLE}help${PLAIN}:    Displays this help and exits"
+        echo -e "\n  The default behavior is to download and install the ${GREEN}stable${PLAIN} version\n"
+        exit 0
+        ;;
     "stable")
         RELEASE="stable"
         ;;
@@ -70,16 +94,7 @@ if [ "$RELEASE" == "auto" ]; then
 fi
 
 echo -e "Parsing ${BLUE}${URL}${PLAIN}..."
-
-# Determine if curl or wget are available
-if which curl >/dev/null 2>&1 ; then
-    JSON="$(curl -Ls "$URL")"
-elif which wget >/dev/null 2>&1 ; then
-    JSON="$(wget -q -O - "$URL")"
-else
-    echo -e "${RED}Either \"curl\" or \"wget\" are required to use this script"
-    exit 2
-fi
+JSON="$($FETCH "$URL")"
 
 # Gather stable and beta tagged releases by loop over JSON returned from GitHub API
 if [ "$TAG" == "auto" ]; then
