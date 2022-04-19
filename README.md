@@ -19,7 +19,7 @@ wget -O - qz.sh |bash
 
 ## Windows
 
-Sorry, support for Windows is currently not available.  If believe you can contribute to this, please fork the project and create a pull request.
+Sorry, support for Windows is currently not available.  If you believe you can contribute to this, please fork the project and create a pull request.
 
 
 ## Advanced
