@@ -29,5 +29,5 @@ Additional parameters can be provided to specify `beta` or an exact tagged relea
 ```bash
 # Download and install the latest stable release of QZ Tray
 curl qz.sh |bash -s -- "beta"   # latest beta release
-curl qz.sh |bash -s -- "2.2.1" # tagged "v2.2.1" release
+curl qz.sh |bash -s -- "2.2.1"  # tagged "v2.2.1" release
 ```
