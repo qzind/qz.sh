@@ -19,7 +19,7 @@ if which curl >/dev/null 2>&1 ; then
 elif which wget >/dev/null 2>&1 ; then
     FETCH="wget -q -O -"
 else
-    echo -e "${RED}Either \"curl\" or \"wget\" are required to use this script"
+    echo -e "${RED}Either \"curl\" or \"wget\" are required to use this script${PLAIN}"
     exit 2
 fi
 
@@ -135,7 +135,7 @@ if [ "$TAG" == "auto" ]; then
     esac
 
     if [ -z "$TAG" ]; then
-        echo -e "${RED}Unable to locate a tag for this release"
+        echo -e "${RED}Unable to locate a tag for this release${PLAIN}"
         exit 2
     fi
 
@@ -194,7 +194,7 @@ case $ARCH in
 esac
 
 if [ -z "$DOWNLOAD_URL" ]; then
-    echo -e "${RED}Unable to locate a download for this platform"
+    echo -e "${RED}Unable to locate a download for this platform${PLAIN}"
     exit 2
 fi
 
@@ -216,7 +216,7 @@ elif which wget >/dev/null 2>&1 ; then
     # Note: GitHub uses redirects, but wget should follow redirects automatically
     wget -q -O $TEMP_FILE "$DOWNLOAD_URL"
 else
-    echo -e "${RED}Either \"curl\" or \"wget\" are required to use this script"
+    echo -e "${RED}Either \"curl\" or \"wget\" are required to use this script${PLAIN}"
     exit 2
 fi
 
