@@ -234,7 +234,7 @@ case $OSTYPE in
             sudo bash "$TEMP_FILE" -- -y
         else
             # fallback to "su -c"
-            su root -c "bash '$TEMP_FILE'"
+            su root -c "bash '$TEMP_FILE' -- -y"
         fi
         ;;
 esac
