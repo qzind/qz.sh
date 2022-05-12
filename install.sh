@@ -231,10 +231,10 @@ case $OSTYPE in
         # Assume .run (makeself) for others
         if which sudo >/dev/null 2>&1 ; then
             # use "sudo" if available
-            sudo bash "$TEMP_FILE" -- -y
+            sudo bash "$TEMP_FILE" --nox11 -- -y
         else
             # fallback to "su -c"
-            su root -c "bash '$TEMP_FILE' -- -y"
+            su root -c "bash '$TEMP_FILE' --nox11 -- -y"
         fi
         ;;
 esac
