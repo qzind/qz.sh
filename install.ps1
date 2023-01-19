@@ -273,6 +273,8 @@ if (Test-Path -Path "$TEMP_FILE") {
 }
 
 # Download the file
+# Suppress output per: https://stackoverflow.com/q/28682642/3196753, https://stackoverflow.com/q/75168064/3196753
+$ProgressPreference = 'SilentlyContinue'
 Invoke-WebRequest "$DOWNLOAD_URL" -OutFile "$TEMP_FILE"
 
 # Install using unattended techniques: https://github.com/qzind/tray/wiki/deployment
