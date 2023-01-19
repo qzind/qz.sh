@@ -139,14 +139,10 @@ $EXTENSION=".exe"
 if($Env:OS -and "$Env:OS".Substring(0, 3) -like "Win*") {
     # Do nothing
 } else {
-    switch -Regex ($Env:OSTYPE) {
-        ".*darwin.*" {
-            $EXTENSION=".pkg"
-            break
-        }
-        default {
-            $EXTENSION=".run"
-        }
+    if($IsMacOS) {
+        $EXTENSION=".pkg"
+    } else {
+        $EXTENSION=".run"
     }
 }
 
