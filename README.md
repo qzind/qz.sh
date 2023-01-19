@@ -29,8 +29,20 @@ irm pwsh.sh | iex
 
 Additional parameters can be provided to specify `beta` or an exact tagged release.
 
+### Curl
 ```bash
-# Download and install the latest stable release of QZ Tray
 curl qz.sh |bash -s -- "beta"   # latest beta release
 curl qz.sh |bash -s -- "2.2.1"  # tagged "v2.2.1" release
+```
+
+### Wget
+```bash
+wget -O - qz.sh |bash -s -- "beta"   # latest beta release
+wget -O - qz.sh |bash -s -- "2.2.1"  # tagged "v2.2.1" release
+```
+
+### PowerShell
+```powershell
+& ([scriptblock]::Create((irm pwsh.sh))) beta   # latest beta release
+& ([scriptblock]::Create((irm pwsh.sh))) 2.2.1  # tagged "v2.2.1" release
 ```
