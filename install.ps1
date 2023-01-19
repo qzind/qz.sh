@@ -192,7 +192,7 @@ if("$TAG" -eq "auto") {
     Write-Host "Latest " -NoNewline
     Write-Host         "$RELEASE" -ForegroundColor Green -NoNewline
     Write-Host                  " version found: " -NoNewline
-    Write-Host                                   "$TAG" -ForegroundColor Blue -NoNewline
+    Write-Host                                   "$TAG" -ForegroundColor Blue
 }
 
 # Get URL for latest release
@@ -230,7 +230,7 @@ foreach($url in $OS_URLS) {
             break
         }
         default {
-            $ARM64_URLS += $url
+            $AMD64_URLS += $url
         }
     }
 }
