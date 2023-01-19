@@ -19,11 +19,20 @@ wget -O - qz.sh |bash
 
 ## Windows
 
-```bash
+```powershell
 # Download and install the latest stable release of QZ Tray
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
 irm pwsh.sh | iex
 ```
+
+<details>
+<summary>Click to expand what to do if you recieve a security error</summary>
+
+```powershell
+# Optional: Needed to run a remote script the first time
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+</details>
+   
 
 ## Advanced
 
