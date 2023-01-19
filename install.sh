@@ -110,6 +110,7 @@ if [ "$TAG" == "auto" ]; then
                 ;;
             *"\"prerelease\": false,"*)
                 STABLE_TAGS+="$tag_name"$'\n'
+                BETA_TAGS+="$tag_name"$'\n'
                 ;;
             *"\"prerelease\": true,"*)
                 BETA_TAGS+="$tag_name"$'\n'
