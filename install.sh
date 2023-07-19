@@ -212,7 +212,7 @@ fi
 # Download installer using curl or wget
 if which curl >/dev/null 2>&1 ; then
     # Note: GitHub uses redirects, make sure "curl -L" is specifed
-    curl -Ls "$DOWNLOAD_URL" --output "/tmp/${REPO}-${TAG}${EXTENSION}"
+    curl -Lks "$DOWNLOAD_URL" --output "/tmp/${REPO}-${TAG}${EXTENSION}"
 elif which wget >/dev/null 2>&1 ; then
     # Note: GitHub uses redirects, but wget should follow redirects automatically
     wget -q -O $TEMP_FILE "$DOWNLOAD_URL"
