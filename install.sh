@@ -15,7 +15,7 @@ URL="https://api.github.com/repos/${OWNER}/${REPO}/releases?per_page=100"
 FETCH=""
 # Determine if curl or wget are available
 if which curl >/dev/null 2>&1 ; then
-    FETCH="curl -Ls"
+    FETCH="curl -Lks"
 elif which wget >/dev/null 2>&1 ; then
     FETCH="wget -q -O -"
 else
