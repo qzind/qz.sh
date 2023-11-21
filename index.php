@@ -1,22 +1,27 @@
 <?php
-$USERAGENT = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower($_SERVER['HTTP_USER_AGENT']) : "";
+$USERAGENT = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+error_log("User agent: '$USERAGENT'");
+$USERAGENT = strtolower($USERAGENT);
 
 // shell => URL
 $REDIRECTS = array(
     "pwsh" => "install.ps1",
-    "bash" => "install.sh"
+    "bash" => "install.sh",
+    "browser" => "README.md"
 );
 
 function get_redirect() {
     global $USERAGENT, $REDIRECTS;
-    $shell = "bash";
-    if($USERAGENT == "" || strpos($USERAGENT, "powershell") !== false) {
-        $shell = "pwsh";
+    $detected = "browser";
+    if(strpos($USERAGENT, "powershell") !== false) {
+        $detected = "pwsh";
     }
     if(strpos($USERAGENT, "wget") !== false || strpos($USERAGENT, "curl") !== false) {
-        $shell = "bash";
+        $detected = "bash";
     }
-    return $REDIRECTS[$shell];
+    $redirect = $REDIRECTS[$detected];
+    error_log("Answering: '$redirect'");
+    return $redirect;
 }
 
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
