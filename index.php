@@ -1,4 +1,9 @@
 <?php
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-Type: text/plain");
+
 $USERAGENT = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
 error_log("User agent: '$USERAGENT'");
 $USERAGENT = strtolower($USERAGENT);
@@ -7,7 +12,7 @@ $USERAGENT = strtolower($USERAGENT);
 $REDIRECTS = array(
     "pwsh" => "install.ps1",
     "bash" => "install.sh",
-    "browser" => "README.md"
+    "browser" => "https://github.com/qzind/qz.sh"
 );
 
 function get_redirect() {
@@ -21,14 +26,12 @@ function get_redirect() {
     }
     $redirect = $REDIRECTS[$detected];
     error_log("Answering: '$redirect'");
-    return $redirect;
+    if($detected == "browser") {
+        header("Location: $redirect");
+    }
+    echo file_get_contents($redirect);
 }
 
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-header("Content-Type: text/plain");
-
-echo file_get_contents(get_redirect());
+get_redirect();
 
 ?>
